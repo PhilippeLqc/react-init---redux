@@ -26,10 +26,21 @@ function Retrait() {
   };
 
   const handleRetrait = () => {
-    dispatch(setDecouvert(retrait.decouvert));
-    dispatch(setAmount(retrait.amount));
-    dispatch(setSold(retrait.sold));
-    dispatch(login(retrait.Nom));
+    // - Demandez le montant du découvert (0 s'il n'y a pas découvert autorisé) ;
+    // - Demandez le solde en cours ;
+    // - Tant que le solde le permet, demandez au client s'il souhaite effectuer un autre retrait. Il saisira la valeur du retrait ou 0 pour quitter ;
+    // - Affichez le nouveau solde et le montant du découvert ou "solde insuffisant".
+    if (!retrait.sold > retrait.amount) {
+      alert("solde insuffisant");
+    } else {
+      const montant = prompt("Entrez le montant du découvert");
+      const solde = prompt("Entrez le solde en cours");
+      const retrait = prompt("Entrez le montant du retrait");
+      const nouveauSolde = solde - retrait;
+      alert(`Nouveau solde : ${nouveauSolde}`);
+
+      //utilisez do while pour demander au client s'il souhaite effectuer un autre retrait en prenant en compte le nouveau solde
+    }
   };
 
   return (
