@@ -4,6 +4,7 @@ import usestate from "usestate";
 
 function Ouverture() {
 	const [isChoiceVisible, setChoiceVisible] = useState(false);
+	const [choice, setChoice] = useState("");
 	const [isOverdraftContainerVisible, setOverdraftContainerVisible] = useState(false);
 	const [isAmountContainerVisible, setAmountContainerVisible] = useState(false);
 	const [isRecapVisible, setRecapVisible] = useState(false);
@@ -12,11 +13,13 @@ function Ouverture() {
 		const handleKeyDown = (e) => {
 			if (e.key == "y") {
 				setChoiceVisible(true);
+				setChoice("Oui");
 				setOverdraftContainerVisible(true);
 				setAmountContainerVisible(true);
 				setRecapVisible(true);
 			} else {
 				setChoiceVisible(true);
+				setChoice("Non");
 				setAmountContainerVisible(true);
 				setRecapVisible(true);
 			}
@@ -36,7 +39,7 @@ function Ouverture() {
 				<p>Voulez-vous avoir un découvert ?</p>
 				<p>Si oui, appuyez sur la touche <span id="y">Y</span>, sinon appuyez sur une autre touche</p>
 				{isChoiceVisible &&
-					<p className="choice">Découvert : <span id="choice"></span></p>
+					<p className="choice">Découvert : <span id="choice">{choice}</span></p>
 				}
 
 				{isOverdraftContainerVisible && 
