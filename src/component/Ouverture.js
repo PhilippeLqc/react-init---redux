@@ -16,7 +16,9 @@ function Ouverture() {
 				setAmountContainerVisible(true);
 				setRecapVisible(true);
 			} else {
-				console.log("test");
+				setChoiceVisible(true);
+				setAmountContainerVisible(true);
+				setRecapVisible(true);
 			}
 		 };
 
