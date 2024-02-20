@@ -45,6 +45,7 @@ function Ouverture() {
 				setChoice("Non");
 				setAmountContainerVisible(true);
 				setRecapVisible(true);
+				setOverdraftAmount("0");
 			}
 		 };
 
