@@ -1,4 +1,4 @@
-.Ouverture {
+/* .Ouverture {
     text-align: center;
   }
   
@@ -9,4 +9,48 @@
     align-items: center;
     justify-content: center;
     font-size: calc(10px + 2vmin);
-  }
+  } */
+
+  /* * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+} */
+
+.container {
+  font-family: monospace;
+    margin: 0 auto;
+    padding: 30px;
+    width: 40%;
+    border: solid 4px rgb(102,153,204);
+    border-radius: 20px;
+    font-size: 1rem;
+    line-height: 30px;
+}
+
+.container p#title {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.container span#y {
+    font-weight: bold;
+    border: solid 2px rgba(0, 0, 0, 0.8);
+    background: rgb(102,153,204);
+    padding: 4px;
+}
+
+.container input {
+    padding: 3px;
+    border: solid 1px rgb(102,153,204);
+    border-radius: 5px;
+    width: 60px;
+}
+
+.choice, .overdraft-container, #overdraft-alert, .amount-container, #amount-alert, .recap-container {
+    display: none;
+}
+
+#overdraft-alert, #amount-alert {
+    color: red;
+}

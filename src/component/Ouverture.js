@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { login, logout, setPassword, setEmail } from "../reducer/user";
 import { TextField, Button, Switch } from "@mui/material";
@@ -6,91 +6,51 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import "./Ouverture.css";
 
 function Ouverture() {
-  const user = useSelector((state) => state.user.user);
-  const dispatch = useDispatch();
-  const [newUser, setNewUser] = useState({
-    Nom: "",
-    Email: "",
-    password: "",
-  });
-  const [authorized, setAuthorized] = useState(false);
+	const [isOverdraftContainerVisible, setOverdraftContainerVisible] = useState(false);
 
-  const handleInput = (e) => {
-    const { name, value } = e.target;
-    setNewUser({ ...newUser, [name]: value });
-    if (name === "Email") {
-      dispatch(setEmail(value));
-    } else if (name === "Password") {
-      dispatch(setPassword(value));
-    }
-  };
+	const handleKeyDown = (e) => {
+		if (e.key == "y") {
+		  console.log('coucou');
+		  setOverdraftContainerVisible(true);
+		}
+	 };
+  
+	useEffect(() => {
+		document.body.addEventListener('keydown', handleKeyDown);
 
-  // Dispatch des actions lorsque le bouton de connexion est cliqué
-  const handleLogin = () => {
-    dispatch(setEmail(newUser.Email));
-    dispatch(setPassword(newUser.password));
-    dispatch(login(newUser.Nom));
-  };
-
-  const handleSwitch = () => {
-    setAuthorized(!authorized);
-  };
+		return () => {
+			document.body.removeEventListener('keydown', handleKeyDown);
+		};
+	}, []);
 
   return (
-    <div className="Ouverture">
-      <header className="Ouverture-header">
-        <TextField
-          id="outlined-basic"
-          label="Nom"
-          variant="outlined"
-          name="Nom"
-          onChange={handleInput}
-        />
-        <TextField
-          id="outlined-basic"
-          label="Email"
-          variant="outlined"
-          name="Email"
-          onChange={handleInput}
-        />
-        <TextField
-          id="outlined-basic"
-          label="Password"
-          variant="outlined"
-          name="password"
-          onChange={handleInput}
-        />
-        <FormControlLabel
-          required
-          control={<Switch />}
-          label="Découvert autorisé?"
-          onChange={handleSwitch}
-        />
-        {authorized && (
-          <TextField
-            id="outlined-basic"
-            label="Montant du découvert"
-            variant="outlined"
-            name="decouvert"
-            onChange={handleInput}
-          />
-        )}
-        <Button variant="contained" color="primary" onClick={handleLogin}>
-          Login
-        </Button>
+		<main>
+			<div className="container">
+				<p id="title">Bienvenue chez GTM Bank</p>
+				<p>Voulez-vous avoir un découvert ?</p>
+				<p>Si oui, appuyez sur la touche <span id="y">Y</span>, sinon appuyez sur une autre touche</p>
+				<p className="choice">Découvert : <span id="choice"></span></p>
 
-        <div>
-          <h1>{user}</h1>
-          <Button
-            variant="contained"
-            onClick={() => dispatch(logout())}
-            color="error"
-          >
-            Logout
-          </Button>
-        </div>
-      </header>
-    </div>
+				{isOverdraftContainerVisible && 
+					<div className="overdraft-container">
+						<label htmlFor="overdraft">Saisissez le montant du découvert entre 100€ et 2000€</label>
+						<input type="number" name="overdraft" id="overdraft" min="100" max="2000" placeholder="100" required />
+						<p id="overdraft-alert">Veuillez saisir un montant compris entre 100€ et 2000€</p>
+					</div>
+				}
+
+				<div className="amount-container">
+					<label htmlFor="amount">Saisissez le montant de dépôt (minimum 500€)</label>
+					<input type="number" name="amount" id="amount" min="500" placeholder="500" required />
+					<p id="amount-alert">Veuillez saisir un montant minimum de 500 €</p>
+				</div>
+
+				<div className="recap-container">
+					<p>Montant du découvert autorisé : <span id="allowed-overdraft"></span>€</p>
+					<p>Montant à transférer : <span id="transfer"></span>€</p>
+				</div>
+			</div>
+		</main>
   );
 }
 
