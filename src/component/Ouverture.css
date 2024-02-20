@@ -47,10 +47,6 @@
     width: 60px;
 }
 
-.choice, .overdraft-container, #overdraft-alert, .amount-container, #amount-alert, .recap-container {
-    display: none;
-}
-
 #overdraft-alert, #amount-alert {
     color: red;
 }

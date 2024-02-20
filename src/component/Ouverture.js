@@ -3,31 +3,23 @@ import "./Ouverture.css";
 import usestate from "usestate";
 
 function Ouverture() {
-	const [isOverdraft, setIsOverDraft] = useState(false);
 	const [isChoiceVisible, setChoiceVisible] = useState(false);
 	const [isOverdraftContainerVisible, setOverdraftContainerVisible] = useState(false);
 	const [isAmountContainerVisible, setAmountContainerVisible] = useState(false);
 	const [isRecapVisible, setRecapVisible] = useState(false);
 
-	const handleKeyDown = (e) => {
-		if (e.key == "y") {
-			console.log('coucou');
-			setIsOverDraft(!isOverdraft);
-			setChoiceVisible(true);
-			setOverdraftContainerVisible(true);
-			setAmountContainerVisible(true);
-			setRecapVisible(true);
-
-			console.log('isOverDraft:', isOverdraft);
-			console.log('isChoiceVisible:', isChoiceVisible);
-			console.log('isOverdraftContainerVisible:', isOverdraftContainerVisible);
-			console.log('isAmountContainerVisible:', isAmountContainerVisible);
-			console.log('isRecapVisible:', isRecapVisible);
-
-		}
-	 };
-  
 	useEffect(() => {
+		const handleKeyDown = (e) => {
+			if (e.key == "y") {
+				setChoiceVisible(true);
+				setOverdraftContainerVisible(true);
+				setAmountContainerVisible(true);
+				setRecapVisible(true);
+			} else {
+				console.log("test");
+			}
+		 };
+
 		document.body.addEventListener('keydown', handleKeyDown);
 
 		return () => {
@@ -36,7 +28,7 @@ function Ouverture() {
 	}, []);
 
   return (
-		<main>
+		<main tabIndex={0}>
 			<div className="container">
 				<p id="title">Bienvenue chez GTM Bank</p>
 				<p>Voulez-vous avoir un découvert ?</p>
