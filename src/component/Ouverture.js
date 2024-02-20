@@ -1,17 +1,29 @@
 import { React, useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { login, logout, setPassword, setEmail } from "../reducer/user";
-import { TextField, Button, Switch } from "@mui/material";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import "./Ouverture.css";
+import usestate from "usestate";
 
 function Ouverture() {
+	const [isOverdraft, setIsOverDraft] = useState(false);
+	const [isChoiceVisible, setChoiceVisible] = useState(false);
 	const [isOverdraftContainerVisible, setOverdraftContainerVisible] = useState(false);
+	const [isAmountContainerVisible, setAmountContainerVisible] = useState(false);
+	const [isRecapVisible, setRecapVisible] = useState(false);
 
 	const handleKeyDown = (e) => {
 		if (e.key == "y") {
-		  console.log('coucou');
-		  setOverdraftContainerVisible(true);
+			console.log('coucou');
+			setIsOverDraft(!isOverdraft);
+			setChoiceVisible(true);
+			setOverdraftContainerVisible(true);
+			setAmountContainerVisible(true);
+			setRecapVisible(true);
+
+			console.log('isOverDraft:', isOverdraft);
+			console.log('isChoiceVisible:', isChoiceVisible);
+			console.log('isOverdraftContainerVisible:', isOverdraftContainerVisible);
+			console.log('isAmountContainerVisible:', isAmountContainerVisible);
+			console.log('isRecapVisible:', isRecapVisible);
+
 		}
 	 };
   
@@ -29,7 +41,9 @@ function Ouverture() {
 				<p id="title">Bienvenue chez GTM Bank</p>
 				<p>Voulez-vous avoir un découvert ?</p>
 				<p>Si oui, appuyez sur la touche <span id="y">Y</span>, sinon appuyez sur une autre touche</p>
-				<p className="choice">Découvert : <span id="choice"></span></p>
+				{isChoiceVisible &&
+					<p className="choice">Découvert : <span id="choice"></span></p>
+				}
 
 				{isOverdraftContainerVisible && 
 					<div className="overdraft-container">
@@ -39,16 +53,20 @@ function Ouverture() {
 					</div>
 				}
 
-				<div className="amount-container">
-					<label htmlFor="amount">Saisissez le montant de dépôt (minimum 500€)</label>
-					<input type="number" name="amount" id="amount" min="500" placeholder="500" required />
-					<p id="amount-alert">Veuillez saisir un montant minimum de 500 €</p>
-				</div>
+				{isAmountContainerVisible && 
+					<div className="amount-container">
+						<label htmlFor="amount">Saisissez le montant de dépôt (minimum 500€)</label>
+						<input type="number" name="amount" id="amount" min="500" placeholder="500" required />
+						<p id="amount-alert">Veuillez saisir un montant minimum de 500 €</p>
+					</div>
+				}
 
-				<div className="recap-container">
-					<p>Montant du découvert autorisé : <span id="allowed-overdraft"></span>€</p>
-					<p>Montant à transférer : <span id="transfer"></span>€</p>
-				</div>
+				{isRecapVisible &&
+					<div className="recap-container">
+						<p>Montant du découvert autorisé : <span id="allowed-overdraft"></span>€</p>
+						<p>Montant à transférer : <span id="transfer"></span>€</p>
+					</div>
+				}
 			</div>
 		</main>
   );
