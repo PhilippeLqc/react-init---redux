@@ -6,6 +6,9 @@ export const userSlice = createSlice({
     user: null,
     password: null,
     email: null,
+    decouvert: Boolean,
+    amount: Number,
+    sold: Number,
   },
   reducers: {
     login: (state, action) => {
@@ -20,10 +23,27 @@ export const userSlice = createSlice({
     setEmail: (state, action) => {
       state.email = action.payload;
     },
+    setDecouvert: (state, action) => {
+      state.decouvert = action.payload;
+    },
+    setAmount: (state, action) => {
+      state.amount = action.payload;
+    },
+    setSold: (state, action) => {
+      state.sold = action.payload;
+    },
   },
 });
 
-export const { login, logout, setPassword, setEmail } = userSlice.actions;
+export const {
+  login,
+  logout,
+  setPassword,
+  setEmail,
+  setDecouvert,
+  setAmount,
+  setSold,
+} = userSlice.actions;
 
 export const selectUser = (state) => state.user.user;
 
