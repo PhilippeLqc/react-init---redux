@@ -3,48 +3,95 @@ import { useSelector, useDispatch } from "react-redux";
 import { login, setAmount, setDecouvert, setSold } from "../reducer/user";
 import { TextField, Button, dividerClasses } from "@mui/material";
 import { Box } from "@mui/system";
+import InputAdornment from '@mui/material/InputAdornment';
 
 function Agios() {
-  // Écrivez un algorithme qui calcule les agios avec un taux de 10% pour un découvert utilisé durant X jours.
-
-  // Par exemple, j'ai utilisé 500 euros de mon découvert autorisé durant 15 jours, j'aurai une pénalité à payer à la banque de 2.05 € qui correspond à l'opération suivante : `(500 * 15 *(10/100)) / 365` <=> `500 * 15 * 0.1 / 365`.
-
-  // En entrée, votre algorithme prend :
-
-  // 1. Le montant du découvert ;
-  // 2. Durée d'utilisation du découvert (en jour).
-
-  // En sortie, votre algorithme affiche la somme que le client devra payer à la banque **arrondie à 2 chiffres après la virgule.**
-
-  // Votre algorithme s'arrête immédiatement lorsque le client n'a pas droit au découvert (montant du découvert égale à zéro), affichez le message "Découvert non autorisé => pas d'agios".
-  // Forcez le client à saisir les bonnes valeurs :
-  // - Montant du découvert compris entre 100 € et 2000 € ou égale à zéro lorsqu'il n'a pas droit au découvert ;
-  // - Le nombre de jours compris entre 1 et 365.
-
-  // #### Formulaire pour calculer d'agios
-
-  // `Agios = (montant utilisé du découvert * nombre de jours d'utilisation * taux de la banque) / 365`
-  // `Le taux de banque = 10 / 100 = 0.1`
+  const dispatch = useDispatch()
+  const [agios, setAgios] = useState({
+    overdraftAmount: Number,
+    overdraftTime: Number,
+  });
+  const handleInput = (e) => {
+    const { name, value } = e.target;
+    const numericValue = parseFloat(value);
+    setAgios({ ...agios, [name]: numericValue });
+    if (name === "overdraftAmount") {
+      setValidationError({
+        ...validationError,
+        overdraftAmount: numericValue < 100 || numericValue > 2000 ,
+      });
+      dispatch(setDecouvert(numericValue));
+    } else if (name === "overdraftTime") {
+      setValidationError({
+        ...validationError,
+        overdraftTime: numericValue < 1 || numericValue > 365,
+      });
+      dispatch(setAmount(numericValue));
+    }
+  }
+  const [agiosResult, setAgiosResult] = useState(null);
+  const [validationError, setValidationError] = useState({
+    overdraftAmount: false,
+    overdraftTime: false,
+  });
 
   const handleAgios = () => {
-    const montant = prompt("Entrez le montant du découvert");
-    const jours = prompt("Entrez le nombre de jours d'utilisation");
-    const taux = 0.1;
+    if (!agios.overdraftAmount || !agios.overdraftTime) {
+      setAgiosResult(null);
+      return
+    }
 
-    if (montant === 0) {
-      alert("Découvert non autorisé => pas d'agios");
-    } else {
-      const agios = (montant * jours * taux) / 365;
-      alert(`Vous devez payer ${agios.toFixed(2)} € à la banque`);
+    if (!validationError.overdraftAmount && !validationError.overdraftTime) {
+      const result = agios.overdraftAmount * agios.overdraftTime * 0.1 / 365;
+      setAgiosResult(result.toFixed(2));
     }
   };
 
   return (
     <div>
       <h1>Agios</h1>
+      <div>
+        <TextField
+          id="outlined-basic"
+          label="Montant du découvert"
+          variant="outlined"
+          name="overdraftAmount"
+          onChange={handleInput}
+          error={validationError.overdraftAmount}
+          helperText={
+            validationError.overdraftAmount
+              ? "Montant du découvert doit être entre 100 et 2000"
+              : ""
+          }
+        />
+        <TextField
+          id="outlined-basic"
+          label="Durée d'utilisation du découvert"
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                €
+              </InputAdornment>
+            ),
+          }}
+          variant="outlined"
+          name="overdraftTime"
+          onChange={handleInput}
+          error={validationError.overdraftTime}
+          helperText={
+            validationError.overdraftTime
+              ? "Durée doit être entre 1 et 365 jours"
+              : ""
+          }
+        />
+      </div>
+
+
       <Button variant="contained" color="primary" onClick={handleAgios}>
         Calculer les agios
       </Button>
+      {agiosResult && (
+        <h2>Le montant total des intérêts : {agiosResult} €</h2>)}
     </div>
   );
 }
