@@ -59,6 +59,13 @@ function Agios() {
         <TextField
           id="outlined-basic"
           label="Montant du découvert"
+          InputProps={{
+            endAdornment: (
+                <InputAdornment position="end">
+                  €
+                </InputAdornment>
+            ),
+          }}
           variant="outlined"
           name="overdraftAmount"
           onChange={handleInput}
@@ -72,13 +79,6 @@ function Agios() {
         <TextField
           id="outlined-basic"
           label="Durée d'utilisation du découvert"
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                €
-              </InputAdornment>
-            ),
-          }}
           variant="outlined"
           name="overdraftTime"
           onChange={handleInput}
