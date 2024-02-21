@@ -1,9 +1,9 @@
-import { React, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { login, setAmount, setDecouvert, setSold } from "../reducer/user";
-import { TextField, Button, dividerClasses } from "@mui/material";
-import { Box } from "@mui/system";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setAmount, setDecouvert } from "../reducer/user";
+import { TextField, Button } from "@mui/material";
 import InputAdornment from '@mui/material/InputAdornment';
+import "./Agios.css";
 
 function Agios() {
   const dispatch = useDispatch()
@@ -18,7 +18,7 @@ function Agios() {
     if (name === "overdraftAmount") {
       setValidationError({
         ...validationError,
-        overdraftAmount: numericValue < 100 || numericValue > 2000 ,
+        overdraftAmount: (numericValue !== 0 && numericValue < 100) || numericValue > 2000
       });
       dispatch(setDecouvert(numericValue));
     } else if (name === "overdraftTime") {
@@ -36,20 +36,25 @@ function Agios() {
   });
 
   const handleAgios = () => {
-    if (!agios.overdraftAmount || !agios.overdraftTime) {
+    if (agios.overdraftAmount === null || !agios.overdraftTime) {
       setAgiosResult(null);
       return
     }
 
     if (!validationError.overdraftAmount && !validationError.overdraftTime) {
+      if (agios.overdraftAmount === 0) {
+        setAgiosResult("Découvert non autorisé => pas d'agios");
+        return;
+      }
+
       const result = agios.overdraftAmount * agios.overdraftTime * 0.1 / 365;
-      setAgiosResult(result.toFixed(2));
+      setAgiosResult("Le montant total des intérêts : " + result.toFixed(2) + " €");
     }
   };
 
   return (
-    <div>
-      <h1>Agios</h1>
+    <div className="agios-container">
+      <h2>Agios</h2>
       <div>
         <TextField
           id="outlined-basic"
@@ -86,12 +91,11 @@ function Agios() {
         />
       </div>
 
-
       <Button variant="contained" color="primary" onClick={handleAgios}>
         Calculer les agios
       </Button>
       {agiosResult && (
-        <h2>Le montant total des intérêts : {agiosResult} €</h2>)}
+        <p>{agiosResult}</p>)}
     </div>
   );
 }
